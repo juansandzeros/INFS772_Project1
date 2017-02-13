@@ -8,18 +8,38 @@ def processWords(inputfile, outputfile):
     # inputfile is the original file
     # outputfile is the updated file
     # sort words alphabetically in updated files
+    lines = open(inputfile, "r").readlines()
+    lines_set = set(lines)
+    out = open(outputfile,"w")
+    for line in sorted(lines_set):
+        out.write(line)
     return
 
 def read_stocktwits():
-    lis = {}
+    import string
     f = open("C:/Users/jharrington/Documents/_DSU-MSA/INFS772/Project1/BAC.json")
     json_txt = f.read()
     root = json.loads(json_txt)
+    output = []
+    lis  = []
     for row in root:
         body = row["body"]
-        sentiment = row["entities"]["sentiment"]
-        created = row["created_at"]
-        
+        if row["entities"]["sentiment"] is None:
+            sentiment = "Unknown"
+        else:
+            sentiment = row["entities"]["sentiment"]["basic"]
+        created = datetime.datetime.fromtimestamp(float(row["created_at"]["$date"])/1000.)
+        if len(lis) < 3:
+            lis.append(created.strftime("%Y-%m-%d %H:%M:%S"))
+            lis.append(body.encode("ascii","ignore").lower().translate(string.maketrans("",""), string.punctuation))
+            lis.append(sentiment.encode("ascii","ignore"))
+        if len(lis) == 3:
+            output.append(lis)
+            lis = []
+    fi = open("BAC.csv","w")
+    for item in output:
+        string = ",".join(item)
+        fi.write("%s\n" % string)
     return
 
 def sentiment_analysis():

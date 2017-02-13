@@ -28,6 +28,11 @@
   <ItemGroup>
     <Compile Include="project1.py" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="BAC.json" />
+    <Content Include="negative_words.txt" />
+    <Content Include="positive_words.txt" />
+  </ItemGroup>
   <Import Condition="Exists($(PtvsTargetsFile))" Project="$(PtvsTargetsFile)" />
   <Import Condition="!Exists($(PtvsTargetsFile))" Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
